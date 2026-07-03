@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: 'buraq_application'
+    static_configs:
+      # host.docker.internal allows Prometheus inside the container to reach the Go app running on your host machine
+      - targets: ['host.docker.internal:2112']

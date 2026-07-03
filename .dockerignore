@@ -1,0 +1,7 @@
+.git
+node_modules
+dashboard
+assets
+*.md
+.claude
+benchmark_results.json

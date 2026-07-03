@@ -1,0 +1,60 @@
+goos: windows
+goarch: amd64
+pkg: buraq/internal/worker
+cpu: AMD Ryzen 5 3600 6-Core Processor              
+BenchmarkBuraqQueue
+    bench_test.go:43: Enqueuing 10000 concurrent tasks...
+2026/03/01 18:25:18 Worker pool started. Waiting for context cancellation.
+2026/03/01 18:25:19 Worker node 41 gracefully shut down
+2026/03/01 18:25:19 Worker node 48 gracefully shut down
+2026/03/01 18:25:19 Worker node 43 gracefully shut down
+2026/03/01 18:25:19 Worker node 4 gracefully shut down
+2026/03/01 18:25:19 Worker node 5 gracefully shut down
+2026/03/01 18:25:19 Worker node 49 gracefully shut down
+2026/03/01 18:25:19 Worker node 7 gracefully shut down
+2026/03/01 18:25:19 Worker node 18 gracefully shut down
+2026/03/01 18:25:19 Worker node 13 gracefully shut down
+2026/03/01 18:25:19 Worker node 12 gracefully shut down
+2026/03/01 18:25:19 Worker node 17 gracefully shut down
+2026/03/01 18:25:19 Worker node 11 gracefully shut down
+2026/03/01 18:25:19 Worker node 9 gracefully shut down
+2026/03/01 18:25:19 Worker node 14 gracefully shut down
+2026/03/01 18:25:19 Worker node 10 gracefully shut down
+2026/03/01 18:25:19 Worker node 15 gracefully shut down
+2026/03/01 18:25:19 Worker node 16 gracefully shut down
+2026/03/01 18:25:19 Worker node 2 gracefully shut down
+2026/03/01 18:25:19 Worker node 1 gracefully shut down
+2026/03/01 18:25:19 Worker node 0 gracefully shut down
+2026/03/01 18:25:19 Worker node 47 gracefully shut down
+2026/03/01 18:25:19 Worker node 21 gracefully shut down
+2026/03/01 18:25:19 Worker node 45 gracefully shut down
+2026/03/01 18:25:19 Worker node 44 gracefully shut down
+2026/03/01 18:25:19 Worker node 46 gracefully shut down
+2026/03/01 18:25:19 Worker node 39 gracefully shut down
+2026/03/01 18:25:19 Worker node 42 gracefully shut down
+2026/03/01 18:25:19 Worker node 6 gracefully shut down
+2026/03/01 18:25:19 Worker node 3 gracefully shut down
+2026/03/01 18:25:19 Worker node 8 gracefully shut down
+2026/03/01 18:25:19 Worker node 31 gracefully shut down
+2026/03/01 18:25:19 Worker node 34 gracefully shut down
+2026/03/01 18:25:19 Worker node 35 gracefully shut down
+2026/03/01 18:25:19 Worker node 37 gracefully shut down
+2026/03/01 18:25:19 Worker node 38 gracefully shut down
+2026/03/01 18:25:19 Worker node 29 gracefully shut down
+2026/03/01 18:25:19 Worker node 40 gracefully shut down
+2026/03/01 18:25:19 Worker node 26 gracefully shut down
+2026/03/01 18:25:19 Worker node 24 gracefully shut down
+2026/03/01 18:25:19 Worker node 30 gracefully shut down
+2026/03/01 18:25:19 Worker node 27 gracefully shut down
+2026/03/01 18:25:19 Worker node 36 gracefully shut down
+2026/03/01 18:25:19 Worker node 32 gracefully shut down
+2026/03/01 18:25:19 Worker node 25 gracefully shut down
+2026/03/01 18:25:19 Worker node 22 gracefully shut down
+2026/03/01 18:25:19 Worker node 33 gracefully shut down
+2026/03/01 18:25:19 Worker node 28 gracefully shut down
+2026/03/01 18:25:19 Worker node 23 gracefully shut down
+2026/03/01 18:25:19 Worker node 19 gracefully shut down
+2026/03/01 18:25:19 Worker node 20 gracefully shut down
+BenchmarkBuraqQueue-12    	       1	1692610800 ns/op	      6011 TPS	      1469 p99_latency_ms	         1.664 total_seconds
+PASS
+ok  	buraq/internal/worker	1.944s

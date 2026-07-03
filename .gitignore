@@ -1,0 +1,11 @@
+/.idea/
+/.vscode/
+/secret_docs/
+*.exe
+*.log
+benchmark_results.json
+.env
+.env.local
+node_modules/
+.next/
+out/
