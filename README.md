@@ -134,19 +134,30 @@ buraq/
 
 - **Go 1.24+**
 - **Docker & Docker Compose** (for the local Redis / Prometheus / Grafana stack)
+- **Node.js 20+** (only if running the dashboard)
 
-### 1. Start the Infrastructure
+### Quick Start (Docker)
 
 ```bash
 docker-compose up -d
 ```
 
-This starts:
-- **Redis** on `localhost:6379`
-- **Prometheus** on `localhost:9090`
-- **Grafana** on `localhost:3000`
+This starts everything — Redis, Prometheus, Grafana, and Buraq itself:
 
-### 2. Run Buraq
+- **Buraq API** on `http://localhost:8080`
+- **Prometheus metrics** on `http://localhost:2112/metrics`
+- **Prometheus UI** on `http://localhost:9090`
+- **Grafana** on `http://localhost:3000` (default: `admin` / `admin`)
+
+### Manual Setup
+
+#### 1. Start the Infrastructure
+
+```bash
+docker-compose up -d redis prometheus grafana
+```
+
+#### 2. Run Buraq
 
 ```bash
 go run main.go
@@ -162,7 +173,17 @@ CORS_ORIGINS=http://localhost:3000,https://myapp.com \
 go run main.go
 ```
 
-### 3. Observe
+### 3. Start the Dashboard (Optional)
+
+```bash
+cd dashboard
+npm install
+npm run dev
+```
+
+Opens at `http://localhost:3000` — real-time visualization of task flow, worker map, and DLQ management. Connects to the API via SSE.
+
+### 4. Observe
 
 | Endpoint | Description |
 |---|---|
@@ -172,6 +193,7 @@ go run main.go
 | `http://localhost:8080/api/health` | Health check (Redis connectivity + uptime) |
 | `http://localhost:9090` | Prometheus UI |
 | `http://localhost:3000` | Grafana |
+| `http://localhost:3000` | Dashboard (if running) |
 
 ---
 
@@ -263,6 +285,26 @@ Deep-dive guides covering every concept in the project:
 - [x] **Redis Cluster Support** — Horizontal scaling with cluster mode
 - [ ] **Cron / Delayed Jobs** — Schedule tasks for future execution or on a recurring interval
 - [ ] **Web Dashboard Auth** — Add authentication to the Next.js dashboard
+
+---
+
+## 🖥️ Dashboard
+
+The Next.js dashboard provides real-time visualization:
+
+- **Task Columns** — Pending, Processing, and DLQ tasks with animated transitions
+- **Worker Map** — Interactive React Flow visualization with pulse effects on activity
+- **Throughput Stats** — Live TPS and P99 latency from benchmark data
+- **DLQ Management** — "Retry All" button to replay failed tasks
+- **Auto-Reconnect** — SSE connection automatically retries on disconnect (up to 5 times)
+
+| Feature           | Implementation                          |
+| ----------------- | --------------------------------------- |
+| Memory-safe       | Tasks capped at 100 (FIFO eviction)     |
+| Typed             | Full TypeScript — no `any` types        |
+| Configurable URL  | `NEXT_PUBLIC_API_URL` env var           |
+| Loading states    | "Connecting..." indicator on startup    |
+| Error handling    | "Connection lost" message with retry    |
 
 ---
 
