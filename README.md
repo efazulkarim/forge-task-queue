@@ -1,12 +1,12 @@
-# Buraq Task Queue
+# Forge Task Queue
 
 ![Go Version](https://img.shields.io/badge/Go-1.24+-00ADD8?style=flat&logo=go)
 ![Redis](https://img.shields.io/badge/Redis-Streams-DC382D?style=flat&logo=redis)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat)
 
-Buraq is a highly concurrent, resilient distributed task queue built with **Go** and **Redis Streams**. It provides robust capabilities out of the box for handling asynchronous jobs, scaling workers, and managing failures seamlessly through automatic retries and a Dead-Letter Queue (DLQ).
+Forge is a highly concurrent, resilient distributed task queue built with **Go** and **Redis Streams**. It provides robust capabilities out of the box for handling asynchronous jobs, scaling workers, and managing failures seamlessly through automatic retries and a Dead-Letter Queue (DLQ).
 
-If a worker crashes or fails, the task is automatically re-queued up to a configurable retry limit before being isolated to a dedicated Dead-Letter Queue (`buraq_tasks_dlq`) for inspection and manual replay.
+If a worker crashes or fails, the task is automatically re-queued up to a configurable retry limit before being isolated to a dedicated Dead-Letter Queue (`Forge_tasks_dlq`) for inspection and manual replay.
 
 ![Dashboard Preview](assets/tasks_chart.png)
 
@@ -53,7 +53,7 @@ Run it yourself:
 
 ```bash
 # Requires Redis running on localhost:6379
-go test -v -run=^$ -bench=BenchmarkBuraqQueue -benchtime=1x ./benchmarks/
+go test -v -run=^$ -bench=BenchmarkForgeQueue -benchtime=1x ./benchmarks/
 ```
 
 ---
@@ -64,17 +64,17 @@ go test -v -run=^$ -bench=BenchmarkBuraqQueue -benchtime=1x ./benchmarks/
 Producer (XADD)
      │
      ▼
-Redis Stream (buraq_tasks)          ┌── buraq_tasks_high (priority)
-     │                              ├── buraq_tasks      (normal)
-     ▼                              └── buraq_tasks_low   (priority)
+Redis Stream (Forge_tasks)          ┌── Forge_tasks_high (priority)
+     │                              ├── Forge_tasks      (normal)
+     ▼                              └── Forge_tasks_low   (priority)
 Consumer Group (XREADGROUP)
      │
      ├── Idempotency Check (SET NX)
      ├── Worker 1 ──► Process ──► XACK  ──► ✅ Success
      ├── Worker 2 ──► Process ──► Retry ──► Re-queue (up to MaxRetries)
-     └── Worker N ──► Process ──► DLQ   ──► buraq_tasks_dlq
+     └── Worker N ──► Process ──► DLQ   ──► Forge_tasks_dlq
 
-All state changes ──► Redis Pub/Sub (buraq_events) ──► SSE API ──► Dashboard
+All state changes ──► Redis Pub/Sub (Forge_events) ──► SSE API ──► Dashboard
 ```
 
 ### Key Design Decisions
@@ -89,7 +89,7 @@ All state changes ──► Redis Pub/Sub (buraq_events) ──► SSE API ─�
 ## 📁 Project Structure
 
 ```
-buraq/
+Forge/
 ├── main.go                 # Entry point: config, wiring, signal handling
 ├── config/
 │   └── config.go           # Environment-based configuration
@@ -120,7 +120,7 @@ buraq/
 ├── dashboard/              # Next.js frontend
 ├── docs/                   # Deep-dive documentation guides
 ├── Dockerfile              # Multi-stage Go build
-├── docker-compose.yml      # Redis + Prometheus + Grafana + Buraq
+├── docker-compose.yml      # Redis + Prometheus + Grafana + Forge
 ├── prometheus.yml          # Prometheus scrape config
 └── .github/workflows/
     └── ci.yml              # GitHub Actions CI pipeline
@@ -142,9 +142,9 @@ buraq/
 docker-compose up -d
 ```
 
-This starts everything — Redis, Prometheus, Grafana, and Buraq itself:
+This starts everything — Redis, Prometheus, Grafana, and Forge itself:
 
-- **Buraq API** on `http://localhost:8080`
+- **Forge API** on `http://localhost:8080`
 - **Prometheus metrics** on `http://localhost:2112/metrics`
 - **Prometheus UI** on `http://localhost:9090`
 - **Grafana** on `http://localhost:3000` (default: `admin` / `admin`)
@@ -157,7 +157,7 @@ This starts everything — Redis, Prometheus, Grafana, and Buraq itself:
 docker-compose up -d redis prometheus grafana
 ```
 
-#### 2. Run Buraq
+#### 2. Run Forge
 
 ```bash
 go run main.go
@@ -206,8 +206,8 @@ All configuration is via environment variables:
 | `REDIS_ADDR` | `localhost:6379` | Redis server address |
 | `REDIS_CLUSTER` | `false` | Enable Redis Cluster mode |
 | `REDIS_ADDRS` | `localhost:6379` | Comma-separated cluster node addresses |
-| `STREAM_NAME` | `buraq_tasks` | Main task stream name |
-| `GROUP_NAME` | `buraq_workers` | Consumer group name |
+| `STREAM_NAME` | `Forge_tasks` | Main task stream name |
+| `GROUP_NAME` | `Forge_workers` | Consumer group name |
 | `CONSUMER_NAME` | `worker_node_1` | This consumer's identity |
 | `WORKER_COUNT` | `5` | Number of worker goroutines |
 | `FETCH_BATCH_SIZE` | `10` | Messages per XREADGROUP call |
@@ -220,7 +220,7 @@ All configuration is via environment variables:
 | `MAX_RETRIES` | `3` | Default max retries per task |
 | `ENABLE_MOCK_TASKS` | `true` | Enable/disable mock task production |
 | `ENABLE_PRIORITY` | `false` | Enable priority queue routing |
-| `DLQ_STREAM_NAME` | `buraq_tasks_dlq` | Dead-Letter Queue stream name |
+| `DLQ_STREAM_NAME` | `Forge_tasks_dlq` | Dead-Letter Queue stream name |
 
 ---
 
@@ -322,7 +322,7 @@ go test ./...
 go test -v ./tests/
 
 # Benchmarks
-go test -v -run=^$ -bench=BenchmarkBuraqQueue -benchtime=1x ./benchmarks/
+go test -v -run=^$ -bench=BenchmarkForgeQueue -benchtime=1x ./benchmarks/
 
 # Lint
 golangci-lint run
@@ -332,7 +332,7 @@ golangci-lint run
 
 ```bash
 # Build
-docker build -t buraq .
+docker build -t Forge .
 
 # Run with docker-compose (includes Redis, Prometheus, Grafana)
 docker-compose up -d
